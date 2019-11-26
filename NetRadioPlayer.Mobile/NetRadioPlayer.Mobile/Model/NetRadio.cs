@@ -8,5 +8,6 @@ namespace NetRadioPlayer.Mobile.Model
   {
     public string RadioName { get; set; }
     public string RadioUrl { get; set; }
+    public string Folder { get; set; }
   }
 }

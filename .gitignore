@@ -338,3 +338,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/NetRadioPlayer.Mobile/NetRadioPlayer.Mobile/appsettings.production.json
+/NetRadioPlayer.Mobile/NetRadioPlayer.Mobile.Android/Assets/appsettings.json
