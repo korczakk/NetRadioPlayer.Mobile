@@ -1,7 +1,5 @@
-﻿using Android.Content.Res;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace NetRadioPlayer.Mobile.Helpers
 {
@@ -9,7 +7,7 @@ namespace NetRadioPlayer.Mobile.Helpers
   {
     private static Appsettings instance;
     private static object lockObject = new object();
-    private Dictionary<string, string> settings;
+    private static Dictionary<string, string> settings;
 
     public static Appsettings Settings
     {
@@ -27,57 +25,25 @@ namespace NetRadioPlayer.Mobile.Helpers
       }
     }
 
-    private Appsettings()
-    {
-      // read file
-      ReadFile();
-    }
-
     public string this[string name]
     {
       get
       {
-        return this.settings[name];
+        return Settings[name];
       }
     }
-    private async Task ReadFile()
+
+    private Appsettings()
     {
-      try
-      {
-        AssetManager assets = Android.App.Application.Context.Assets;
-        var test = assets.Open("appsettings.json");
-
-        using (var stream = new StreamReader(test))
-        {
-          var read = stream.ReadToEnd();
-        }
-      }
-      catch (System.Exception ex)
-      {
-
-        throw;
-      }
-
     }
 
-    //private async Task ReadFile()
-    //{
-    //  try
-    //  {
-        
+    public static void LoadAppsettings(IAppsettingsReader appsettingsReader)
+    {
+      string json = appsettingsReader.ReadFile();
 
-    //    using (var stream = new StreamReader("appsettings.json"))
-    //    {
-    //      var read = stream.ReadToEnd();
-    //    }
-    //  }
-    //  catch (System.Exception ex)
-    //  {
+      settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+    }
 
-    //    throw;
-    //  }
-
-    //}
 
   }
 }
