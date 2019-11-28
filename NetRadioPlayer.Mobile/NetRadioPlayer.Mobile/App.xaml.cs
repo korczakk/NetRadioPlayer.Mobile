@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetRadioPlayer.Mobile.Persistance;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,8 +14,10 @@ namespace NetRadioPlayer.Mobile
       MainPage = new MainPage();
     }
 
-    protected override void OnStart()
+    protected async override void OnStart()
     {
+      await SqliteDatabaseHandler.LoadSqliteDatabase();
+
       // Handle when your app starts
     }
 

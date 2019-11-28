@@ -1,4 +1,5 @@
-﻿using NetRadioPlayer.Mobile.ViewModels;
+﻿using NetRadioPlayer.Mobile.Persistance;
+using NetRadioPlayer.Mobile.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,12 +21,14 @@ namespace NetRadioPlayer.Mobile
     {
       InitializeComponent();
       viewModel = new MainVm();
+      
     }
 
     protected override void OnAppearing()
     {
+      var db = SqliteDatabaseHandler.SqliteDatabase;
+
       base.OnAppearing();
-      Task.Run(() => viewModel.CheckIfPlayerIsReady());
     }
   }
 }
