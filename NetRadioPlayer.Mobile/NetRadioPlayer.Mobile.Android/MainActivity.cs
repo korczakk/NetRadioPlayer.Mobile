@@ -2,8 +2,8 @@
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
-using NetRadioPlayer.Mobile.Helpers;
 using NetRadioPlayer.Mobile.Droid.Helpers;
+using NetRadioPlayer.Mobile.Configuration;
 
 namespace NetRadioPlayer.Mobile.Droid
 {

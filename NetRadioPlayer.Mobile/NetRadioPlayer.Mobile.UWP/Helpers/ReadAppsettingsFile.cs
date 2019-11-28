@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using NetRadioPlayer.Mobile.Helpers;
+using NetRadioPlayer.Mobile.Configuration;
 
 namespace NetRadioPlayer.Mobile.UWP.Helpers
 {

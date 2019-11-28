@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace NetRadioPlayer.Mobile.Helpers
+namespace NetRadioPlayer.Mobile.Configuration
 {
   public class Appsettings
   {

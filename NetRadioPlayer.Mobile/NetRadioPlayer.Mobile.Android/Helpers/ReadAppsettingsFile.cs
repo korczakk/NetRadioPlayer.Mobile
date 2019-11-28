@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using Android.Content.Res;
-using NetRadioPlayer.Mobile.Helpers;
+using NetRadioPlayer.Mobile.Configuration;
 
 namespace NetRadioPlayer.Mobile.Droid.Helpers
 {

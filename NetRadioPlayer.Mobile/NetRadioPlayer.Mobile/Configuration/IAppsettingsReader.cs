@@ -1,4 +1,4 @@
-﻿namespace NetRadioPlayer.Mobile.Helpers
+﻿namespace NetRadioPlayer.Mobile.Configuration
 {
   public interface IAppsettingsReader
   {
