@@ -16,9 +16,7 @@ namespace NetRadioPlayer.Mobile
 
     protected async override void OnStart()
     {
-      await SqliteDatabaseHandler.LoadSqliteDatabase();
-
-      // Handle when your app starts
+      await SqliteDatabaseHandler.LoadSqliteDatabase(DependencyService.Get<IDbPath>());
     }
 
     protected override void OnSleep()

@@ -1,4 +1,5 @@
-﻿using NetRadioPlayer.Mobile.Persistance;
+﻿using NetRadioPlayer.Mobile.Model;
+using NetRadioPlayer.Mobile.Persistance;
 using NetRadioPlayer.Mobile.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -24,9 +25,12 @@ namespace NetRadioPlayer.Mobile
       
     }
 
-    protected override void OnAppearing()
+    protected async override void OnAppearing()
     {
-      var db = SqliteDatabaseHandler.SqliteDatabase;
+      var db = await SqliteDatabaseHandler.GetDatabase();
+
+      await db.InsertAsync(new NetRadio { RadioName = "Test" });
+      var test = await db.QueryAsync<NetRadio>("select * from NetRadio");
 
       base.OnAppearing();
     }
