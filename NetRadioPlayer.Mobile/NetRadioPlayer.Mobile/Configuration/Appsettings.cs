@@ -5,7 +5,7 @@ namespace NetRadioPlayer.Mobile.Configuration
 {
   public class Appsettings
   {
-    private static Appsettings instance;
+    private static Appsettings instance = null;
     private static object lockObject = new object();
     private static Dictionary<string, string> settings;
 
@@ -29,7 +29,7 @@ namespace NetRadioPlayer.Mobile.Configuration
     {
       get
       {
-        return Settings[name];
+        return settings[name];
       }
     }
 

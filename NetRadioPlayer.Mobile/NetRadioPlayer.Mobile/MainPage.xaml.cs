@@ -1,6 +1,8 @@
 ﻿using NetRadioPlayer.Mobile.Model;
 using NetRadioPlayer.Mobile.Persistance;
+using NetRadioPlayer.Mobile.Services;
 using NetRadioPlayer.Mobile.ViewModels;
+using NetRadioPlayer.Mobile.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,21 +18,21 @@ namespace NetRadioPlayer.Mobile
   [DesignTimeVisible(false)]
   public partial class MainPage : ContentPage
   {
-    private MainVm viewModel;
+    private MainPageViewModel viewModel;
 
     public MainPage()
     {
       InitializeComponent();
-      viewModel = new MainVm();
-      
+      BindingContext = viewModel;
+
+      var netRadioService = new NetRadioStationsService(new TableStorageHelper());
+      viewModel = new MainPageViewModel(netRadioService);
+
     }
 
     protected async override void OnAppearing()
     {
-      var db = await SqliteDatabaseHandler.GetDatabase();
-
-      await db.InsertAsync(new NetRadio { RadioName = "Test" });
-      var test = await db.QueryAsync<NetRadio>("select * from NetRadio");
+      await viewModel.LoadNetRadios();
 
       base.OnAppearing();
     }

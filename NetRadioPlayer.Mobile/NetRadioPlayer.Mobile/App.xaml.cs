@@ -11,12 +11,12 @@ namespace NetRadioPlayer.Mobile
     {
       InitializeComponent();
 
+      SqliteDatabaseHandler.LoadSqliteDatabase(DependencyService.Get<IDbPath>());
       MainPage = new MainPage();
     }
 
-    protected async override void OnStart()
+    protected override void OnStart()
     {
-      await SqliteDatabaseHandler.LoadSqliteDatabase(DependencyService.Get<IDbPath>());
     }
 
     protected override void OnSleep()
