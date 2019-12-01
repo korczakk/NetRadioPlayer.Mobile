@@ -22,12 +22,11 @@ namespace NetRadioPlayer.Mobile
 
     public MainPage()
     {
-      InitializeComponent();
-      BindingContext = viewModel;
+      InitializeComponent();     
 
       var netRadioService = new NetRadioStationsService(new TableStorageHelper());
       viewModel = new MainPageViewModel(netRadioService);
-
+      BindingContext = viewModel;
     }
 
     protected async override void OnAppearing()

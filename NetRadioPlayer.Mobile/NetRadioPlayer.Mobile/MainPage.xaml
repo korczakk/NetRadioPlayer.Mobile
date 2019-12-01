@@ -4,13 +4,21 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="NetRadioPlayer.Mobile.MainPage">
+             x:Class="NetRadioPlayer.Mobile.MainPage"
+             Title="NetRadio Player">
 
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
+  <StackLayout>
+    <ListView ItemsSource="{Binding RadioStations}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <TextCell Text="{Binding RadioName}" />
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+
+    <Label Text="Welcome to Xamarin.Forms!" 
            HorizontalOptions="Center"
            VerticalOptions="CenterAndExpand" />
-    </StackLayout>
+  </StackLayout>
 
 </ContentPage>

@@ -1,18 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using NetRadioPlayer.Mobile.Model;
 using NetRadioPlayer.Mobile.Services;
+using Xamarin.Forms;
 
 namespace NetRadioPlayer.Mobile.ViewModels
 {
-  public class MainPageViewModel
+  public class MainPageViewModel : INotifyPropertyChanged
   {
     private NetRadioStationsService netRadioStationsService;
+    private ObservableCollection<NetRadio> radioStations = new ObservableCollection<NetRadio>();
 
-    public ObservableCollection<NetRadio> RadioStations { get; private set; }
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    public ObservableCollection<NetRadio> RadioStations
+    {
+      get
+      {
+        return radioStations;
+      }
+      set
+      {
+        radioStations = value;
+        OnPropertyChanged("RadioStations");
+      }
+    }
     public IObservable<bool> IsPlayerReady { get; private set; }
 
     public MainPageViewModel(NetRadioStationsService netRadioService)
@@ -24,16 +40,24 @@ namespace NetRadioPlayer.Mobile.ViewModels
     public async Task LoadNetRadios()
     {
       var result = await netRadioStationsService.GetRadioStationsFromSqliteAsync();
+      
+      await Task.Delay(TimeSpan.FromSeconds(5));
 
-      RadioStations = new ObservableCollection<NetRadio>(result);
+      Device.BeginInvokeOnMainThread(() => RadioStations = new ObservableCollection<NetRadio>(result));
 
       await netRadioStationsService.SyncWithCloud(result);
 
     }
+    public void OnPropertyChanged(string name)
+    {
+      if (this.PropertyChanged != null)
+        this.PropertyChanged(this, new PropertyChangedEventArgs(name));
+    }
 
     private void OnDataSynchronized(object sender, IList<NetRadio> radios)
     {
-      RadioStations = new ObservableCollection<NetRadio>(radios);
+      Device.BeginInvokeOnMainThread(() => RadioStations = new ObservableCollection<NetRadio>(radios));
     }
+
   }
 }
