@@ -8,17 +8,21 @@
              Title="NetRadio Player">
 
   <StackLayout>
-    <ListView ItemsSource="{Binding RadioStations}">
-      <ListView.ItemTemplate>
-        <DataTemplate>
-          <TextCell Text="{Binding RadioName}" />
-        </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
-
-    <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
+    <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="0, 20, 0, 10">
+      <Button Text="Play"></Button>
+      <Button Text="Pause"></Button>
+      <Button Text="Add new radio"></Button>
+      <Button Text="Power off"></Button>
+    </StackLayout>
+    <StackLayout>
+      <ListView  ItemsSource="{Binding RadioStations}">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <TextCell Text="{Binding RadioName}" />
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+    </StackLayout>
   </StackLayout>
 
 </ContentPage>
