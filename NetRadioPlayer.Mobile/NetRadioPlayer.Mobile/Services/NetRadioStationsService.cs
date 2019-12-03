@@ -74,7 +74,7 @@ namespace NetRadioPlayer.Mobile.Services
     private async Task UpdateDataInDatabase(IEnumerable<NetRadio> radios)
     {
       await dbContext.DeleteAllAsync<NetRadio>();
-      await dbContext.InsertAllAsync(radios);
+      await dbContext.InsertAllAsync (radios);
     }
   }
 }

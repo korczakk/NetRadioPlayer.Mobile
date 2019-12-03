@@ -7,9 +7,9 @@ namespace NetRadioPlayer.Mobile.Model
 {
   public class NetRadio : TableEntity
   {
-    public string RadioName { get; private set; }
-    public string RadioUrl { get; private set; }
-    public string Folder { get; private set; }
+    public string RadioName { get;  set; }
+    public string RadioUrl { get;  set; }
+    public string Folder { get;  set; }
 
     public NetRadio()
     {
@@ -33,13 +33,6 @@ namespace NetRadioPlayer.Mobile.Model
     public override int GetHashCode()
     {
       return this.RowKey.GetHashCode();
-    }
-
-    public override void ReadEntity(IDictionary<string, EntityProperty> properties, OperationContext operationContext)
-    {
-      RadioName = properties["RadioName"].StringValue;
-      Folder = properties["Folder"].StringValue;
-      RadioUrl = properties["RadioUrl"].StringValue;
     }
   }
 }

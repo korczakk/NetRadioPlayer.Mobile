@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using NetRadioPlayer.Mobile.Model;
 using NetRadioPlayer.Mobile.Services;
@@ -29,6 +28,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
         OnPropertyChanged("RadioStations");
       }
     }
+
     public IObservable<bool> IsPlayerReady { get; private set; }
 
     public MainPageViewModel(NetRadioStationsService netRadioService)
@@ -41,13 +41,11 @@ namespace NetRadioPlayer.Mobile.ViewModels
     {
       var result = await netRadioStationsService.GetRadioStationsFromSqliteAsync();
       
-      await Task.Delay(TimeSpan.FromSeconds(5));
-
       Device.BeginInvokeOnMainThread(() => RadioStations = new ObservableCollection<NetRadio>(result));
 
       await netRadioStationsService.SyncWithCloud(result);
-
     }
+
     public void OnPropertyChanged(string name)
     {
       if (this.PropertyChanged != null)
@@ -58,6 +56,5 @@ namespace NetRadioPlayer.Mobile.ViewModels
     {
       Device.BeginInvokeOnMainThread(() => RadioStations = new ObservableCollection<NetRadio>(radios));
     }
-
   }
 }
