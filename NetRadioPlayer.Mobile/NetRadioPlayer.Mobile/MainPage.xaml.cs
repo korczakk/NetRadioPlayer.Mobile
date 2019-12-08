@@ -35,5 +35,15 @@ namespace NetRadioPlayer.Mobile
 
       base.OnAppearing();
     }
+
+    private void ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+      viewModel.SelectRadiostation(e.SelectedItem as NetRadio);
+    }
+
+    private void Play_Clicked(object sender, EventArgs e)
+    {
+      viewModel.Play();
+    }
   }
 }

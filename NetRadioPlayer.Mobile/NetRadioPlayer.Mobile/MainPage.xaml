@@ -9,13 +9,13 @@
 
   <StackLayout>
     <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Padding="0, 20, 0, 10">
-      <Button Text="Play"></Button>
+      <Button Text="Play" Clicked="Play_Clicked"></Button>
       <Button Text="Pause"></Button>
       <Button Text="Add new radio"></Button>
       <Button Text="Power off"></Button>
     </StackLayout>
     <StackLayout>
-      <ListView  ItemsSource="{Binding RadioStations}">
+      <ListView  ItemsSource="{Binding RadioStations}" ItemSelected="ItemSelected">
         <ListView.ItemTemplate>
           <DataTemplate>
             <TextCell Text="{Binding RadioName}" />
