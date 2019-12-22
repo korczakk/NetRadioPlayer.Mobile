@@ -17,12 +17,12 @@ namespace NetRadioPlayer.Mobile.Droid
 
       base.OnCreate(savedInstanceState);
 
+      // Load configuration
+      Appsettings.LoadAppsettings(new ReadAppsettingsFile());
+
       Xamarin.Essentials.Platform.Init(this, savedInstanceState);
       global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
       LoadApplication(new App());
-
-      // Load configuration
-      Appsettings.LoadAppsettings(new ReadAppsettingsFile());
     }
     public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
     {

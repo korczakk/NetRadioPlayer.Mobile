@@ -27,6 +27,7 @@ namespace NetRadioPlayer.Mobile
       var netRadioService = new NetRadioStationsService(DependencyService.Resolve<ITableStorageHelper>());
       var iotDeviceService = DependencyService.Resolve<IIoTDeviceService>();
       viewModel = new MainPageViewModel(netRadioService, iotDeviceService);
+
       BindingContext = viewModel;
     }
 
@@ -50,6 +51,11 @@ namespace NetRadioPlayer.Mobile
     private void Pause_clicked(object sender, EventArgs e)
     {
       Task.Run(() => viewModel.Pause());
+    }
+
+    private void Shutdown_clicked(object sender, EventArgs e)
+    {
+      Task.Run(() => viewModel.Shutdown());
     }
   }
 }

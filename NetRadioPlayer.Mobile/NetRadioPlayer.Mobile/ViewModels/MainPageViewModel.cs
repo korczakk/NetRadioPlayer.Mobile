@@ -74,6 +74,11 @@ namespace NetRadioPlayer.Mobile.ViewModels
       await device.ExecuteCommand("pause", "{}");
     }
 
+    public async Task Shutdown()
+    {
+      await device.ExecuteCommand("shutdown", "{}");
+    }
+
     public void SelectRadiostation(NetRadio selectedRadio)
     {
       SelectedRadioStation = selectedRadio;
