@@ -1,6 +1,5 @@
 ﻿using NetRadioPlayer.Mobile.Model;
 using SQLite;
-using System.Threading.Tasks;
 
 namespace NetRadioPlayer.Mobile.Persistance
 {

@@ -14,7 +14,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
   {
     private NetRadioStationsService netRadioStationsService;
     private ObservableCollection<NetRadio> radioStations = new ObservableCollection<NetRadio>();
-    private IoTDeviceService device;
+    private IIoTDeviceService device;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -35,12 +35,12 @@ namespace NetRadioPlayer.Mobile.ViewModels
 
     public NetRadio SelectedRadioStation { get; private set; }
 
-    public MainPageViewModel(NetRadioStationsService netRadioService)
+    public MainPageViewModel(NetRadioStationsService netRadioService, IIoTDeviceService iotDeviceService)
     {
       netRadioStationsService = netRadioService;
       netRadioStationsService.DataSynchronized += OnDataSynchronized;
 
-      device = new IoTDeviceService();
+      device = iotDeviceService;
       device.OpenConnection();
     }
 
@@ -67,6 +67,11 @@ namespace NetRadioPlayer.Mobile.ViewModels
     public async Task Play()
     {
       await device.ExecuteCommand("play", "{\"Uri\": \"" + SelectedRadioStation.RadioUrl + "\"}");
+    }
+
+    public async Task Pause()
+    {
+      await device.ExecuteCommand("pause", "{}");
     }
 
     public void SelectRadiostation(NetRadio selectedRadio)

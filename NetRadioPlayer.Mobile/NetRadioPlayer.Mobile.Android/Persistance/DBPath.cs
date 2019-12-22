@@ -2,10 +2,10 @@
 using NetRadioPlayer.Mobile.Droid.Persistance;
 using NetRadioPlayer.Mobile.Persistance;
 
-[assembly: Xamarin.Forms.Dependency(typeof(DbConnectionString))]
+[assembly: Xamarin.Forms.Dependency(typeof(DBPath))]
 namespace NetRadioPlayer.Mobile.Droid.Persistance
 {
-  public class DbConnectionString : IDbPath
+  public class DBPath : IDbPath
   {
     public string GetSqliteDbPath()
     {

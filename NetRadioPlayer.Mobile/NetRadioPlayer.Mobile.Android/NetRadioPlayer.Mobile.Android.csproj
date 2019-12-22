@@ -67,7 +67,7 @@
   <ItemGroup>
     <Compile Include="Helpers\ReadAppsettingsFile.cs" />
     <Compile Include="MainActivity.cs" />
-    <Compile Include="Persistance\DbConnectionString.cs" />
+    <Compile Include="Persistance\DBPath.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

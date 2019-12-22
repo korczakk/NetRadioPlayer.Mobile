@@ -7,22 +7,27 @@ using NetRadioPlayer.Mobile.Persistance;
 using System.Linq;
 using SQLite;
 using System;
+using NetRadioPlayer.Mobile.Services;
 
 namespace NetRadioPlayer.Mobile.Services
 {
+  /// <summary>
+  /// Class is responsible for handlind list of radio stations both in the cloud and in local database.
+  /// </summary>
   public class NetRadioStationsService
-  {   
+  {
     private readonly ITableStorageHelper tableHelper;
     private readonly SQLiteAsyncConnection dbContext;
 
     public event DataSyncEventHandler DataSynchronized;
+    public delegate void DataSyncEventHandler(object sender, IList<NetRadio> e);
 
     public NetRadioStationsService(ITableStorageHelper tableHelper)
     {
       this.tableHelper = tableHelper;
       dbContext = SqliteDatabaseHandler.DbContext;
     }
-    
+
     public async Task<IList<NetRadio>> GetRadioStationsFromSqliteAsync()
     {
       List<NetRadio> result = await dbContext.QueryAsync<NetRadio>("SELECT * FROM NetRadio");
@@ -35,7 +40,7 @@ namespace NetRadioPlayer.Mobile.Services
       var radioStationsInCloud = await GetRadioStationsFromAzure();
 
       bool compareREsult = radioStationsInCloud.SequenceEqual<NetRadio>(currentRadioStations);
-      if(compareREsult)
+      if (compareREsult)
       {
         return;
       }
@@ -45,7 +50,6 @@ namespace NetRadioPlayer.Mobile.Services
       DataSynchronized?.Invoke(this, radioStationsInCloud);
     }
 
-    public delegate void DataSyncEventHandler(object sender, IList<NetRadio> e);
 
     private async Task<IList<NetRadio>> GetRadioStationsFromAzure()
     {
@@ -57,7 +61,7 @@ namespace NetRadioPlayer.Mobile.Services
       var tableQuery = new Microsoft.WindowsAzure.Storage.Table.TableQuery<NetRadio>();
 
       do
-      {        
+      {
         var result = await tableRef.ExecuteQuerySegmentedAsync<NetRadio>(tableQuery, continuationToken);
         netRadios.AddRange(result.Results);
 
@@ -74,7 +78,7 @@ namespace NetRadioPlayer.Mobile.Services
     private async Task UpdateDataInDatabase(IEnumerable<NetRadio> radios)
     {
       await dbContext.DeleteAllAsync<NetRadio>();
-      await dbContext.InsertAllAsync (radios);
+      await dbContext.InsertAllAsync(radios);
     }
   }
 }

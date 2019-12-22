@@ -22,10 +22,11 @@ namespace NetRadioPlayer.Mobile
 
     public MainPage()
     {
-      InitializeComponent();     
+      InitializeComponent();
 
-      var netRadioService = new NetRadioStationsService(new TableStorageHelper());
-      viewModel = new MainPageViewModel(netRadioService);
+      var netRadioService = new NetRadioStationsService(DependencyService.Resolve<ITableStorageHelper>());
+      var iotDeviceService = DependencyService.Resolve<IIoTDeviceService>();
+      viewModel = new MainPageViewModel(netRadioService, iotDeviceService);
       BindingContext = viewModel;
     }
 
@@ -43,7 +44,12 @@ namespace NetRadioPlayer.Mobile
 
     private void Play_Clicked(object sender, EventArgs e)
     {
-      viewModel.Play();
+      Task.Run(() => viewModel.Play());
+    }
+
+    private void Pause_clicked(object sender, EventArgs e)
+    {
+      Task.Run(() => viewModel.Pause());
     }
   }
 }
