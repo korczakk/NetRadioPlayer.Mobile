@@ -31,11 +31,15 @@ namespace NetRadioPlayer.Mobile
       BindingContext = viewModel;
     }
 
-    protected async override void OnAppearing()
+    protected override void OnAppearing()
+    {    
+      base.OnAppearing();   
+    }
+
+    protected override async void OnBindingContextChanged()
     {
       await viewModel.LoadNetRadios();
-
-      base.OnAppearing();
+      base.OnBindingContextChanged();
     }
 
     private void ItemSelected(object sender, SelectedItemChangedEventArgs e)

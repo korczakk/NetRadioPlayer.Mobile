@@ -17,6 +17,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
     private IIoTDeviceService device;
 
     public event PropertyChangedEventHandler PropertyChanged;
+    //public event EventHandler 
 
     public ObservableCollection<NetRadio> RadioStations
     {

@@ -9,10 +9,10 @@
 
   <StackLayout>
     <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" Padding="0, 20, 0, 25">
-      <ImageButton Clicked="Play_Clicked" Source="Playicon.png" WidthRequest="50" HeightRequest="50"  BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
-      <ImageButton Clicked="Pause_clicked" Source="Pauseicon.png" WidthRequest="50" HeightRequest="50"  BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
-      <ImageButton Source="AddNewicon.png" WidthRequest="50" HeightRequest="50"  BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
-      <ImageButton Clicked="Shutdown_clicked" Source="Shutdownicon.png" WidthRequest="50" HeightRequest="50"  BorderWidth="0" HorizontalOptions="EndAndExpand"></ImageButton>
+      <ImageButton Clicked="Play_Clicked" WidthRequest="50" Source="Playicon.png" BackgroundColor="Transparent" BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
+      <ImageButton Clicked="Pause_clicked" WidthRequest="50" Source="Pauseicon.png" BackgroundColor="Transparent" BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
+      <ImageButton Source="AddNewicon.png" WidthRequest="50" BorderWidth="0" BackgroundColor="Transparent" Margin="20, 0, 0, 0"></ImageButton>
+      <ImageButton Clicked="Shutdown_clicked" WidthRequest="50" Source="Shutdownicon.png" BackgroundColor="Transparent"  BorderWidth="0" HorizontalOptions="EndAndExpand"></ImageButton>
     </StackLayout>
     <StackLayout>
       <ListView  ItemsSource="{Binding RadioStations}" ItemSelected="ItemSelected">
