@@ -24,11 +24,20 @@ namespace NetRadioPlayer.Mobile
     {
       InitializeComponent();
 
+      SetDefaultButtonsVisibility();
+
       var netRadioService = new NetRadioStationsService(DependencyService.Resolve<ITableStorageHelper>());
       var iotDeviceService = DependencyService.Resolve<IIoTDeviceService>();
       viewModel = new MainPageViewModel(netRadioService, iotDeviceService);
 
       BindingContext = viewModel;
+    }
+
+    private void SetDefaultButtonsVisibility()
+    {
+      PlayButton.IsVisible = false;
+      PauseButton.IsVisible = false;
+      ShutdownButton.IsVisible = false;
     }
 
     protected override void OnAppearing()

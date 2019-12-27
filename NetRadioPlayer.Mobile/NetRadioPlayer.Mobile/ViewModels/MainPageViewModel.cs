@@ -17,8 +17,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
     private IIoTDeviceService device;
 
     public event PropertyChangedEventHandler PropertyChanged;
-    //public event EventHandler 
-
+    
     public ObservableCollection<NetRadio> RadioStations
     {
       get
@@ -32,8 +31,6 @@ namespace NetRadioPlayer.Mobile.ViewModels
       }
     }
 
-    public IObservable<bool> IsPlayerReady { get; private set; }
-
     public NetRadio SelectedRadioStation { get; private set; }
 
     public MainPageViewModel(NetRadioStationsService netRadioService, IIoTDeviceService iotDeviceService)
@@ -43,6 +40,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
 
       device = iotDeviceService;
       device.OpenConnection();
+      
     }
 
     public async Task LoadNetRadios()
