@@ -1,4 +1,4 @@
-﻿namespace NetRadioPlayer.Device.Model
+﻿namespace NetRadioPlayer.Mobile.Model
 {
   public class Device2CloudMessage
   {

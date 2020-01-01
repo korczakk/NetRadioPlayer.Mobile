@@ -105,7 +105,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AddNew-icon.png" />
+    <Content Include="AddNewicon.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-200.png" />
     <Content Include="Assets\LargeTile.scale-400.png" />

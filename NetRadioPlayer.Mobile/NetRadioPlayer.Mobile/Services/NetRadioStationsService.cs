@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using NetRadioPlayer.Mobile.Persistance;
 using System.Linq;
 using SQLite;
-using System;
-using NetRadioPlayer.Mobile.Services;
 
 namespace NetRadioPlayer.Mobile.Services
 {

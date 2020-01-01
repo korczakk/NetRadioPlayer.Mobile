@@ -1,4 +1,8 @@
-﻿using NetRadioPlayer.Mobile.Persistance;
+﻿using Microsoft.Azure.EventHubs;
+using Microsoft.Azure.EventHubs.Processor;
+using NetRadioPlayer.Mobile.Configuration;
+using NetRadioPlayer.Mobile.Persistance;
+using NetRadioPlayer.Mobile.Services;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -7,6 +11,8 @@ namespace NetRadioPlayer.Mobile
 {
   public partial class App : Application
   {
+    private EventProcessorHost eventProcessorHost;
+
     public App()
     {
       InitializeComponent();
@@ -15,13 +21,24 @@ namespace NetRadioPlayer.Mobile
       MainPage = new MainPage();
     }
 
-    protected override void OnStart()
+    protected async override void OnStart()
     {
+      var eventHubName = Appsettings.Settings["EventHubName"];
+      var eventHubCN = Appsettings.Settings["EventHubConnectionString"];
+      var eventStorageCN = Appsettings.Settings["EventStorageConnectionString"];
+      var eventContainerName = Appsettings.Settings["EventStorageContainerName"];
+      eventProcessorHost = new EventProcessorHost(
+        eventHubName,
+        PartitionReceiver.DefaultConsumerGroupName,
+        eventHubCN,
+        eventStorageCN,
+        eventContainerName);
+      await eventProcessorHost.RegisterEventProcessorAsync<DeviceEventProcessor>();
     }
 
-    protected override void OnSleep()
+    protected async override void OnSleep()
     {
-      // Handle when your app sleeps
+      await eventProcessorHost.UnregisterEventProcessorAsync();
     }
 
     protected override void OnResume()
