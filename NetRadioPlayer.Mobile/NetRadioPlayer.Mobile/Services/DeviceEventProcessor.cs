@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
 using Microsoft.Azure.EventHubs.Processor;
+using NetRadioPlayer.Mobile.Model;
+using Newtonsoft.Json;
 
 namespace NetRadioPlayer.Mobile.Services
 {
@@ -13,6 +16,10 @@ namespace NetRadioPlayer.Mobile.Services
     {
       return Task.CompletedTask;
     }
+
+    public static event DeviceEventHandler MessageFromDevice;
+
+    public delegate void DeviceEventHandler(Device2CloudMessage content);
 
     public Task OpenAsync(PartitionContext context)
     {
@@ -26,10 +33,16 @@ namespace NetRadioPlayer.Mobile.Services
 
     public Task ProcessEventsAsync(PartitionContext context, IEnumerable<EventData> messages)
     {
+      var messagesFromDevice = new List<Device2CloudMessage>();
+
       foreach (var eventData in messages)
       {
         var data = Encoding.UTF8.GetString(eventData.Body.Array, eventData.Body.Offset, eventData.Body.Count);
+        Device2CloudMessage devMessage = JsonConvert.DeserializeObject<Device2CloudMessage>(data);
+        messagesFromDevice.Add(devMessage);
       }
+
+      MessageFromDevice.Invoke(messagesFromDevice.LastOrDefault());
 
       return context.CheckpointAsync();
     }

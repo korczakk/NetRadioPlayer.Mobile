@@ -40,7 +40,12 @@ namespace NetRadioPlayer.Mobile.ViewModels
 
       device = iotDeviceService;
       device.OpenConnection();
-      
+
+      DeviceEventProcessor.MessageFromDevice += OnMessageFromDevice;
+    }
+
+    private void OnMessageFromDevice(Device2CloudMessage content)
+    {
     }
 
     public async Task LoadNetRadios()
