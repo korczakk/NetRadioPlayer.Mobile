@@ -14,10 +14,13 @@ namespace NetRadioPlayer.Mobile.ViewModels
   {
     private NetRadioStationsService netRadioStationsService;
     private ObservableCollection<NetRadio> radioStations = new ObservableCollection<NetRadio>();
-    private IIoTDeviceService device;
+    private IIoTDeviceService device;    
+    private bool isPlayVisible = false;
+    private bool isPauseVisible = false;
+    private bool isTurnOffVisible = false;
 
     public event PropertyChangedEventHandler PropertyChanged;
-    
+
     public ObservableCollection<NetRadio> RadioStations
     {
       get
@@ -27,11 +30,50 @@ namespace NetRadioPlayer.Mobile.ViewModels
       set
       {
         radioStations = value;
-        OnPropertyChanged("RadioStations");
+        OnPropertyChanged("radioStations");
+      }
+    }
+    public NetRadio SelectedRadioStation { get; private set; }
+    public bool IsPlayVisible
+    {
+      get
+      {
+        return isPlayVisible;
+      }
+
+      private set
+      {
+        this.isPlayVisible = value;
+        OnPropertyChanged(nameof(this.IsPlayVisible));
       }
     }
 
-    public NetRadio SelectedRadioStation { get; private set; }
+    public bool IsTurnOffVisible
+    {
+      get
+      {
+        return isTurnOffVisible;
+      }
+
+      private set
+      {
+        isTurnOffVisible = value;
+        OnPropertyChanged(nameof(IsTurnOffVisible));
+      }
+    }
+    public bool IsPauseVisible
+    {
+      get
+      {
+        return isPauseVisible;
+      }
+
+      private set
+      {
+        isPauseVisible = value;
+        OnPropertyChanged(nameof(IsPauseVisible));
+      }
+    }
 
     public MainPageViewModel(NetRadioStationsService netRadioService, IIoTDeviceService iotDeviceService)
     {
@@ -42,16 +84,14 @@ namespace NetRadioPlayer.Mobile.ViewModels
       device.OpenConnection();
 
       DeviceEventProcessor.MessageFromDevice += OnMessageFromDevice;
-    }
 
-    private void OnMessageFromDevice(Device2CloudMessage content)
-    {
+      device.ExecuteCommand("askforstate", "{}");
     }
 
     public async Task LoadNetRadios()
     {
       var result = await netRadioStationsService.GetRadioStationsFromSqliteAsync();
-      
+
       Device.BeginInvokeOnMainThread(() => RadioStations = new ObservableCollection<NetRadio>(result));
 
       await netRadioStationsService.SyncWithCloud(result);
@@ -59,13 +99,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
 
     public void OnPropertyChanged(string name)
     {
-      if (this.PropertyChanged != null)
-        this.PropertyChanged(this, new PropertyChangedEventArgs(name));
-    }
-
-    private void OnDataSynchronized(object sender, IList<NetRadio> radios)
-    {
-      Device.BeginInvokeOnMainThread(() => RadioStations = new ObservableCollection<NetRadio>(radios));
+      this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
     public async Task Play()
@@ -86,6 +120,46 @@ namespace NetRadioPlayer.Mobile.ViewModels
     public void SelectRadiostation(NetRadio selectedRadio)
     {
       SelectedRadioStation = selectedRadio;
+    }
+
+    private void OnMessageFromDevice(Device2CloudMessage content)
+    {
+      switch (content.DeviceState)
+      {
+        case DeviceState.DeviceReady:
+          IsPlayVisible = true;
+          IsTurnOffVisible = true;
+          IsPauseVisible = false;
+          break;
+        case DeviceState.Paused:
+          IsPlayVisible = true;          
+          IsPauseVisible = false;
+          IsTurnOffVisible = true;
+          break;
+        case DeviceState.Playing:
+          IsPlayVisible = false;
+          IsPauseVisible = true;
+          IsTurnOffVisible = true;
+          break;
+        case DeviceState.NotSet:
+        case DeviceState.TurnedOff:
+          AllButtonsDisabled();
+          break;
+        default:
+          throw new NotImplementedException($"Property not implemented: {content.DeviceState.ToString()}");
+      }
+    }
+
+    private void AllButtonsDisabled()
+    {
+      IsPlayVisible = false;
+      IsPauseVisible = false;
+      IsTurnOffVisible = false;
+    }
+
+    private void OnDataSynchronized(object sender, IList<NetRadio> radios)
+    {
+      Device.BeginInvokeOnMainThread(() => RadioStations = new ObservableCollection<NetRadio>(radios));
     }
   }
 }

@@ -9,10 +9,10 @@
 
   <StackLayout>
     <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" Padding="0, 20, 0, 25">
-      <ImageButton x:Name="PlayButton" Clicked="Play_Clicked" WidthRequest="50" Source="Playicon.png" BackgroundColor="Transparent" BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
-      <ImageButton x:Name="PauseButton" Clicked="Pause_clicked" WidthRequest="50" Source="Pauseicon.png" BackgroundColor="Transparent" BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
+      <ImageButton x:Name="PlayButton" IsVisible="{Binding IsPlayVisible}" Clicked="Play_Clicked" WidthRequest="50" Source="Playicon.png" BackgroundColor="Transparent" BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
+      <ImageButton x:Name="PauseButton" IsVisible="{Binding IsPauseVisible}" Clicked="Pause_clicked" WidthRequest="50" Source="Pauseicon.png" BackgroundColor="Transparent" BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
       <ImageButton Source="AddNewicon.png" WidthRequest="50" BorderWidth="0" BackgroundColor="Transparent" Margin="20, 0, 0, 0"></ImageButton>
-      <ImageButton x:Name="ShutdownButton" Clicked="Shutdown_clicked" WidthRequest="50" Source="Shutdownicon.png" BackgroundColor="Transparent"  BorderWidth="0" HorizontalOptions="EndAndExpand"></ImageButton>
+      <ImageButton x:Name="ShutdownButton" IsVisible="{Binding IsTurnOffVisible}" Clicked="Shutdown_clicked" WidthRequest="50" Source="Shutdownicon.png" BackgroundColor="Transparent"  BorderWidth="0" HorizontalOptions="EndAndExpand"></ImageButton>
     </StackLayout>
     <StackLayout>
       <ListView  ItemsSource="{Binding RadioStations}" ItemSelected="ItemSelected">

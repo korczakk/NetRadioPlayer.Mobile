@@ -37,7 +37,7 @@ namespace NetRadioPlayer.Mobile.Services
 
       foreach (var eventData in messages)
       {
-        var data = Encoding.UTF8.GetString(eventData.Body.Array, eventData.Body.Offset, eventData.Body.Count);
+        var data = Encoding.ASCII.GetString(eventData.Body.Array, eventData.Body.Offset, eventData.Body.Count);        
         Device2CloudMessage devMessage = JsonConvert.DeserializeObject<Device2CloudMessage>(data);
         messagesFromDevice.Add(devMessage);
       }
