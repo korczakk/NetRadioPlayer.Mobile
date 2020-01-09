@@ -23,13 +23,15 @@ namespace NetRadioPlayer.Mobile
 
     protected async override void OnStart()
     {
+      string consumerGroupName = DependencyService.Resolve<IConsumerGroupName>().CreateConsumerGroupName();
+
       var eventHubName = Appsettings.Settings["EventHubName"];
       var eventHubCN = Appsettings.Settings["EventHubConnectionString"];
       var eventStorageCN = Appsettings.Settings["EventStorageConnectionString"];
       var eventContainerName = Appsettings.Settings["EventStorageContainerName"];
       eventProcessorHost = new EventProcessorHost(
         eventHubName,
-        PartitionReceiver.DefaultConsumerGroupName,
+        consumerGroupName,
         eventHubCN,
         eventStorageCN,
         eventContainerName);
