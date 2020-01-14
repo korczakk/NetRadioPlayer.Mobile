@@ -94,8 +94,8 @@ namespace NetRadioPlayer.Mobile.ViewModels
       device.OpenConnection();
 
       DeviceEventProcessor.MessageFromDevice += OnMessageFromDevice;
-
-      device.ExecuteCommand("askforstate", "{}");
+      
+      CallDeviceForStatus();
     }
 
     public void OnDisappearing()
@@ -131,6 +131,11 @@ namespace NetRadioPlayer.Mobile.ViewModels
     public async Task Shutdown()
     {
       await device.ExecuteCommand("shutdown", "{}");
+    }
+
+    public void CallDeviceForStatus()
+    {
+      device.ExecuteCommand("askforstate", "{}");
     }
 
     public void SelectRadiostation(NetRadio selectedRadio)

@@ -67,5 +67,10 @@ namespace NetRadioPlayer.Mobile
     {
       Task.Run(() => viewModel.Shutdown());
     }
+
+    private void Refresh_Clicked(object sender, EventArgs e)
+    {
+      viewModel.CallDeviceForStatus();
+    }
   }
 }

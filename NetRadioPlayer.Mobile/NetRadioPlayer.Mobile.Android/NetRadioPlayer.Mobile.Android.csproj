@@ -96,7 +96,9 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\Refresh.png" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetRadioPlayer.Mobile\NetRadioPlayer.Mobile.csproj">
       <Project>{08DB5E6D-9A2A-4C3E-8150-E5B99C586B4B}</Project>
