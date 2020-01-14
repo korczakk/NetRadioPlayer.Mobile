@@ -24,8 +24,6 @@ namespace NetRadioPlayer.Mobile
     {
       InitializeComponent();
 
-      //SetDefaultButtonsVisibility();
-
       var netRadioService = new NetRadioStationsService(DependencyService.Resolve<ITableStorageHelper>());
       var iotDeviceService = DependencyService.Resolve<IIoTDeviceService>();
       viewModel = new MainPageViewModel(netRadioService, iotDeviceService);
@@ -36,6 +34,12 @@ namespace NetRadioPlayer.Mobile
     protected override void OnAppearing()
     {    
       base.OnAppearing();   
+    }
+
+    protected override void OnDisappearing()
+    {
+      viewModel.OnDisappearing();
+      base.OnDisappearing();
     }
 
     protected override async void OnBindingContextChanged()
@@ -63,13 +67,5 @@ namespace NetRadioPlayer.Mobile
     {
       Task.Run(() => viewModel.Shutdown());
     }
-
-    private void SetDefaultButtonsVisibility()
-    {
-      PlayButton.IsVisible = false;
-      PauseButton.IsVisible = false;
-      ShutdownButton.IsVisible = false;
-    }
-
   }
 }

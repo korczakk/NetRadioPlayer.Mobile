@@ -42,7 +42,8 @@ namespace NetRadioPlayer.Mobile.Services
         messagesFromDevice.Add(devMessage);
       }
 
-      MessageFromDevice.Invoke(messagesFromDevice.LastOrDefault());
+      var lastMessage = messagesFromDevice.LastOrDefault(x => x.CheckIsMessageValid(TimeSpan.FromMinutes(3)));
+      MessageFromDevice.Invoke(lastMessage ?? new Device2CloudMessage("", DeviceState.NotSet, "{}"));
 
       return context.CheckpointAsync();
     }

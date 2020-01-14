@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
 
 namespace NetRadioPlayer.Mobile.Model
 {
@@ -12,11 +13,19 @@ namespace NetRadioPlayer.Mobile.Model
 
     public string JsonPayload { get; set; }
 
+    public DateTime EventTime { get; set; }
     public Device2CloudMessage(string message, DeviceState state, string jsonPayload)
     {
       MessageContent = message;
       DeviceState = state;
       JsonPayload = jsonPayload;
+    }
+
+    public bool CheckIsMessageValid(TimeSpan span)
+    {
+      var diff = DateTime.UtcNow.Subtract(this.EventTime);
+
+      return diff < span;
     }
   }
 }

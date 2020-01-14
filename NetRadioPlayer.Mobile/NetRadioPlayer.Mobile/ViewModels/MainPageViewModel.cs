@@ -14,10 +14,11 @@ namespace NetRadioPlayer.Mobile.ViewModels
   {
     private NetRadioStationsService netRadioStationsService;
     private ObservableCollection<NetRadio> radioStations = new ObservableCollection<NetRadio>();
-    private IIoTDeviceService device;    
+    private IIoTDeviceService device;
     private bool isPlayVisible = false;
     private bool isPauseVisible = false;
     private bool isTurnOffVisible = false;
+    private NetRadio currentlyPlayingRadioStation;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -30,10 +31,20 @@ namespace NetRadioPlayer.Mobile.ViewModels
       set
       {
         radioStations = value;
-        OnPropertyChanged("radioStations");
+        OnPropertyChanged(nameof(radioStations));
       }
     }
     public NetRadio SelectedRadioStation { get; private set; }
+    public NetRadio CurrentlyPlayingRadioStation
+    {
+      get => currentlyPlayingRadioStation;
+      private set
+      {
+        currentlyPlayingRadioStation = value;
+        OnPropertyChanged(nameof(CurrentlyPlayingRadioStation));
+      }
+    }
+
     public bool IsPlayVisible
     {
       get
@@ -47,7 +58,6 @@ namespace NetRadioPlayer.Mobile.ViewModels
         OnPropertyChanged(nameof(this.IsPlayVisible));
       }
     }
-
     public bool IsTurnOffVisible
     {
       get
@@ -86,6 +96,12 @@ namespace NetRadioPlayer.Mobile.ViewModels
       DeviceEventProcessor.MessageFromDevice += OnMessageFromDevice;
 
       device.ExecuteCommand("askforstate", "{}");
+    }
+
+    public void OnDisappearing()
+    {
+      netRadioStationsService.DataSynchronized -= OnDataSynchronized;
+      DeviceEventProcessor.MessageFromDevice -= OnMessageFromDevice;
     }
 
     public async Task LoadNetRadios()
@@ -132,14 +148,16 @@ namespace NetRadioPlayer.Mobile.ViewModels
           IsPauseVisible = false;
           break;
         case DeviceState.Paused:
-          IsPlayVisible = true;          
+          IsPlayVisible = true;
           IsPauseVisible = false;
           IsTurnOffVisible = true;
+          CurrentlyPlayingRadioStation = null;
           break;
         case DeviceState.Playing:
           IsPlayVisible = false;
           IsPauseVisible = true;
           IsTurnOffVisible = true;
+          CurrentlyPlayingRadioStation = RadioStations.FirstOrDefault(s => s.RadioUrl == content.JsonPayload);
           break;
         case DeviceState.NotSet:
         case DeviceState.TurnedOff:

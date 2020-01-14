@@ -9,13 +9,13 @@
 
   <StackLayout>
     <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" Padding="0, 20, 0, 25">
-      <ImageButton x:Name="PlayButton" IsVisible="{Binding IsPlayVisible}" Clicked="Play_Clicked" WidthRequest="50" Source="Playicon.png" BackgroundColor="Transparent" BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
-      <ImageButton x:Name="PauseButton" IsVisible="{Binding IsPauseVisible}" Clicked="Pause_clicked" WidthRequest="50" Source="Pauseicon.png" BackgroundColor="Transparent" BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
+      <ImageButton x:Name="PlayButton" IsVisible="{Binding IsPlayVisible, FallbackValue=False}" Clicked="Play_Clicked" WidthRequest="50" Source="Playicon.png" BackgroundColor="Transparent" BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
+      <ImageButton x:Name="PauseButton" IsVisible="{Binding IsPauseVisible, FallbackValue=False}" Clicked="Pause_clicked" WidthRequest="50" Source="Pauseicon.png" BackgroundColor="Transparent" BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
       <ImageButton Source="AddNewicon.png" WidthRequest="50" BorderWidth="0" BackgroundColor="Transparent" Margin="20, 0, 0, 0"></ImageButton>
-      <ImageButton x:Name="ShutdownButton" IsVisible="{Binding IsTurnOffVisible}" Clicked="Shutdown_clicked" WidthRequest="50" Source="Shutdownicon.png" BackgroundColor="Transparent"  BorderWidth="0" HorizontalOptions="EndAndExpand"></ImageButton>
+      <ImageButton x:Name="ShutdownButton" IsVisible="{Binding IsTurnOffVisible, FallbackValue=False}" Clicked="Shutdown_clicked" WidthRequest="50" Source="Shutdownicon.png" BackgroundColor="Transparent"  BorderWidth="0" HorizontalOptions="EndAndExpand"></ImageButton>
     </StackLayout>
     <StackLayout>
-      <ListView  ItemsSource="{Binding RadioStations}" ItemSelected="ItemSelected">
+      <ListView  ItemsSource="{Binding RadioStations}" SelectedItem="{Binding CurrentlyPlayingRadioStation, Mode=TwoWay}" ItemSelected="ItemSelected">
         <ListView.ItemTemplate>
           <DataTemplate>
             <TextCell Text="{Binding RadioName}" />
