@@ -18,7 +18,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
     private bool isPlayVisible = false;
     private bool isPauseVisible = false;
     private bool isTurnOffVisible = false;
-    private NetRadioGroup currentlyPlayingRadioStation;
+    private NetRadio currentlyPlayingRadioStation;
     private IList<NetRadio> netRadiosFromDb;
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -36,7 +36,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
       }
     }
     public NetRadio SelectedRadioStation { get; private set; }
-    public NetRadioGroup CurrentlyPlayingRadioStation
+    public NetRadio CurrentlyPlayingRadioStation
     {
       get => currentlyPlayingRadioStation;
       private set
@@ -163,8 +163,11 @@ namespace NetRadioPlayer.Mobile.ViewModels
         case DeviceState.Playing:
           IsPlayVisible = false;
           IsPauseVisible = true;
-          IsTurnOffVisible = true;          
-          CurrentlyPlayingRadioStation = RadioStations.FirstOrDefault(x => x.Any(z => z.RadioUrl == content.JsonPayload));
+          IsTurnOffVisible = true;
+          CurrentlyPlayingRadioStation = RadioStations
+            .SelectMany(x => x.RadioStations)
+            .Where(x => x.RadioUrl == content.JsonPayload)
+            .FirstOrDefault();
           break;
         case DeviceState.NotSet:
         case DeviceState.TurnedOff:

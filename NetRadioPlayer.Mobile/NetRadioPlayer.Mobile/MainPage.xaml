@@ -18,7 +18,7 @@
     <StackLayout>
       <ListView  
         ItemsSource="{Binding RadioStations}" 
-        SelectedItem="{Binding CurrentlyPlayingRadioStation, Mode=TwoWay}" 
+        SelectedItem="{Binding CurrentlyPlayingRadioStation , Mode=TwoWay}" 
         ItemSelected="ItemSelected"
         IsGroupingEnabled="True"
         GroupDisplayBinding="{Binding FolderName}">
