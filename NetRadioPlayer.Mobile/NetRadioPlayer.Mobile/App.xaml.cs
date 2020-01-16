@@ -16,7 +16,6 @@ namespace NetRadioPlayer.Mobile
     public App()
     {
       InitializeComponent();
-
       SqliteDatabaseHandler.LoadSqliteDatabase(DependencyService.Get<IDbPath>());
       MainPage = new MainPage();
     }

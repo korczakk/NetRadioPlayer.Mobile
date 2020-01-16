@@ -31,21 +31,15 @@ namespace NetRadioPlayer.Mobile
       BindingContext = viewModel;
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {    
-      base.OnAppearing();   
-    }
+      base.OnAppearing();
 
-    protected override void OnDisappearing()
-    {
-      viewModel.OnDisappearing();
-      base.OnDisappearing();
-    }
+      await viewModel.CallDeviceForStatus();
+      
+      await viewModel.LoadNetRadiosFromDb();
 
-    protected override async void OnBindingContextChanged()
-    {
-      await viewModel.LoadNetRadios();
-      base.OnBindingContextChanged();
+      await viewModel.SyncDataWithAzure();
     }
 
     private void ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -68,9 +62,9 @@ namespace NetRadioPlayer.Mobile
       Task.Run(() => viewModel.Shutdown());
     }
 
-    private void Refresh_Clicked(object sender, EventArgs e)
+    private async void Refresh_Clicked(object sender, EventArgs e)
     {
-      viewModel.CallDeviceForStatus();
+      await viewModel.CallDeviceForStatus();
     }
   }
 }

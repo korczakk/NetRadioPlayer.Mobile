@@ -1,5 +1,6 @@
 ﻿using NetRadioPlayer.Mobile.Model;
 using SQLite;
+using System.Threading.Tasks;
 
 namespace NetRadioPlayer.Mobile.Persistance
 {
@@ -7,20 +8,14 @@ namespace NetRadioPlayer.Mobile.Persistance
   {
     private static SQLiteAsyncConnection sqliteConnection;
 
-    public static SQLiteAsyncConnection DbContext
-    {
-      get
-      {
-        return sqliteConnection;
-      }      
-    }
+    public static SQLiteAsyncConnection DbContext => sqliteConnection;
 
     public static void LoadSqliteDatabase(IDbPath dbPath)
     {
       string path = dbPath.GetSqliteDbPath();
       var dbConnection = new SQLiteAsyncConnection(path);
       sqliteConnection = dbConnection;
-      
+
       dbConnection.CreateTableAsync<NetRadio>(CreateFlags.None);
     }
   }

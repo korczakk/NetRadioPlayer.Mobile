@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using NetRadioPlayer.Mobile.Model;
 using NetRadioPlayer.Mobile.Services;
-using Xamarin.Forms;
+using NetRadioPlayer.Mobile.Helpers;
 
 namespace NetRadioPlayer.Mobile.ViewModels
 {
@@ -19,6 +19,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
     private bool isPauseVisible = false;
     private bool isTurnOffVisible = false;
     private NetRadioGroup currentlyPlayingRadioStation;
+    private IList<NetRadio> netRadiosFromDb;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -31,7 +32,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
       set
       {
         radioStations = value;
-        OnPropertyChanged(nameof(radioStations));
+        OnPropertyChanged(nameof(RadioStations));
       }
     }
     public NetRadio SelectedRadioStation { get; private set; }
@@ -44,7 +45,6 @@ namespace NetRadioPlayer.Mobile.ViewModels
         OnPropertyChanged(nameof(CurrentlyPlayingRadioStation));
       }
     }
-
     public bool IsPlayVisible
     {
       get
@@ -94,25 +94,18 @@ namespace NetRadioPlayer.Mobile.ViewModels
       device.OpenConnection();
 
       DeviceEventProcessor.MessageFromDevice += OnMessageFromDevice;
-      
-      CallDeviceForStatus();
     }
 
-    public void OnDisappearing()
+    public async Task LoadNetRadiosFromDb()
     {
-      netRadioStationsService.DataSynchronized -= OnDataSynchronized;
-      DeviceEventProcessor.MessageFromDevice -= OnMessageFromDevice;
+      netRadiosFromDb = await netRadioStationsService.GetRadioStationsFromSqliteAsync();
+
+      RadioStations = new ObservableCollection<NetRadioGroup>(netRadiosFromDb.ToNetRadioGroup());      
     }
 
-    public async Task LoadNetRadios()
+    public async Task SyncDataWithAzure()
     {
-      var result = await netRadioStationsService.GetRadioStationsFromSqliteAsync();
-
-      var grouped = CreateGroupedRadioStations(result);
-      RadioStations = new ObservableCollection<NetRadioGroup>(grouped);
-
-      //to wynieść do eventu który tu jest invoke
-      await netRadioStationsService.SyncWithCloud(result);
+      await netRadioStationsService.SyncWithCloud(netRadiosFromDb);
     }
 
     public void OnPropertyChanged(string name)
@@ -135,9 +128,16 @@ namespace NetRadioPlayer.Mobile.ViewModels
       await device.ExecuteCommand("shutdown", "{}");
     }
 
-    public void CallDeviceForStatus()
+    public async Task CallDeviceForStatus()
     {
-      device.ExecuteCommand("askforstate", "{}");
+      try
+      {
+        await device.ExecuteCommand("askforstate", "{}");
+      }
+      catch (Exception)
+      {
+        //show notification that device is unreachable
+      }      
     }
 
     public void SelectRadiostation(NetRadio selectedRadio)
@@ -184,13 +184,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
 
     private void OnDataSynchronized(object sender, IList<NetRadio> radios)
     {
-      IEnumerable<NetRadioGroup> grouped = CreateGroupedRadioStations(radios);
-      RadioStations = new ObservableCollection<NetRadioGroup>(grouped);
+      RadioStations = new ObservableCollection<NetRadioGroup>(radios.ToNetRadioGroup());
     }
-
-    private IEnumerable<NetRadioGroup> CreateGroupedRadioStations(IList<NetRadio> radiosInput) =>
-      radiosInput.GroupBy(key => key.Folder)
-      .Select(x => new NetRadioGroup(x.Key, x.ToList()));
-    
   }
 }
