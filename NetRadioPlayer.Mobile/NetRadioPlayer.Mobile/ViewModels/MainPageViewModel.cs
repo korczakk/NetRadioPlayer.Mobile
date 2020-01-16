@@ -13,16 +13,16 @@ namespace NetRadioPlayer.Mobile.ViewModels
   public class MainPageViewModel : INotifyPropertyChanged
   {
     private NetRadioStationsService netRadioStationsService;
-    private ObservableCollection<NetRadio> radioStations = new ObservableCollection<NetRadio>();
+    private ObservableCollection<NetRadioGroup> radioStations = new ObservableCollection<NetRadioGroup>();
     private IIoTDeviceService device;
     private bool isPlayVisible = false;
     private bool isPauseVisible = false;
     private bool isTurnOffVisible = false;
-    private NetRadio currentlyPlayingRadioStation;
+    private NetRadioGroup currentlyPlayingRadioStation;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public ObservableCollection<NetRadio> RadioStations
+    public ObservableCollection<NetRadioGroup> RadioStations
     {
       get
       {
@@ -35,7 +35,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
       }
     }
     public NetRadio SelectedRadioStation { get; private set; }
-    public NetRadio CurrentlyPlayingRadioStation
+    public NetRadioGroup CurrentlyPlayingRadioStation
     {
       get => currentlyPlayingRadioStation;
       private set
@@ -108,8 +108,10 @@ namespace NetRadioPlayer.Mobile.ViewModels
     {
       var result = await netRadioStationsService.GetRadioStationsFromSqliteAsync();
 
-      Device.BeginInvokeOnMainThread(() => RadioStations = new ObservableCollection<NetRadio>(result));
+      var grouped = CreateGroupedRadioStations(result);
+      RadioStations = new ObservableCollection<NetRadioGroup>(grouped);
 
+      //to wynieść do eventu który tu jest invoke
       await netRadioStationsService.SyncWithCloud(result);
     }
 
@@ -161,8 +163,8 @@ namespace NetRadioPlayer.Mobile.ViewModels
         case DeviceState.Playing:
           IsPlayVisible = false;
           IsPauseVisible = true;
-          IsTurnOffVisible = true;
-          CurrentlyPlayingRadioStation = RadioStations.FirstOrDefault(s => s.RadioUrl == content.JsonPayload);
+          IsTurnOffVisible = true;          
+          CurrentlyPlayingRadioStation = RadioStations.FirstOrDefault(x => x.Any(z => z.RadioUrl == content.JsonPayload));
           break;
         case DeviceState.NotSet:
         case DeviceState.TurnedOff:
@@ -182,7 +184,13 @@ namespace NetRadioPlayer.Mobile.ViewModels
 
     private void OnDataSynchronized(object sender, IList<NetRadio> radios)
     {
-      Device.BeginInvokeOnMainThread(() => RadioStations = new ObservableCollection<NetRadio>(radios));
+      IEnumerable<NetRadioGroup> grouped = CreateGroupedRadioStations(radios);
+      RadioStations = new ObservableCollection<NetRadioGroup>(grouped);
     }
+
+    private IEnumerable<NetRadioGroup> CreateGroupedRadioStations(IList<NetRadio> radiosInput) =>
+      radiosInput.GroupBy(key => key.Folder)
+      .Select(x => new NetRadioGroup(x.Key, x.ToList()));
+    
   }
 }

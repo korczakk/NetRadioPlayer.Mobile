@@ -16,7 +16,12 @@
       <ImageButton IsVisible="{Binding IsTurnOffVisible, FallbackValue=False}" Clicked="Shutdown_clicked" WidthRequest="50" Source="Shutdownicon.png" BackgroundColor="Transparent"  BorderWidth="0" HorizontalOptions="EndAndExpand"></ImageButton>
     </StackLayout>
     <StackLayout>
-      <ListView  ItemsSource="{Binding RadioStations}" SelectedItem="{Binding CurrentlyPlayingRadioStation, Mode=TwoWay}" ItemSelected="ItemSelected">
+      <ListView  
+        ItemsSource="{Binding RadioStations}" 
+        SelectedItem="{Binding CurrentlyPlayingRadioStation, Mode=TwoWay}" 
+        ItemSelected="ItemSelected"
+        IsGroupingEnabled="True"
+        GroupDisplayBinding="{Binding FolderName}">
         <ListView.ItemTemplate>
           <DataTemplate>
             <TextCell Text="{Binding RadioName}" />
