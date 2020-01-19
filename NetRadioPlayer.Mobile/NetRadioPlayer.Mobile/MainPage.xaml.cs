@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using NetRadioPlayer.Mobile.UIStrategies;
 
 namespace NetRadioPlayer.Mobile
 {
@@ -26,7 +27,7 @@ namespace NetRadioPlayer.Mobile
 
       var netRadioService = new NetRadioStationsService(DependencyService.Resolve<ITableStorageHelper>());
       var iotDeviceService = DependencyService.Resolve<IIoTDeviceService>();
-      viewModel = new MainPageViewModel(netRadioService, iotDeviceService);
+      viewModel = new MainPageViewModel(netRadioService, iotDeviceService, new UIVisibilityStrategyFactory());
 
       BindingContext = viewModel;
     }

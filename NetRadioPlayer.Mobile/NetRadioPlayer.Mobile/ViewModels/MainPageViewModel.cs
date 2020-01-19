@@ -7,6 +7,7 @@ using System.Linq;
 using NetRadioPlayer.Mobile.Model;
 using NetRadioPlayer.Mobile.Services;
 using NetRadioPlayer.Mobile.Helpers;
+using NetRadioPlayer.Mobile.UIStrategies;
 
 namespace NetRadioPlayer.Mobile.ViewModels
 {
@@ -15,6 +16,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
     private NetRadioStationsService netRadioStationsService;
     private ObservableCollection<NetRadioGroup> radioStations = new ObservableCollection<NetRadioGroup>();
     private IIoTDeviceService device;
+    private readonly UIVisibilityStrategyFactory visibilityStrategyFactory;
     private bool isPlayVisible = false;
     private bool isPauseVisible = false;
     private bool isTurnOffVisible = false;
@@ -45,6 +47,9 @@ namespace NetRadioPlayer.Mobile.ViewModels
         OnPropertyChanged(nameof(CurrentlyPlayingRadioStation));
       }
     }
+
+    private IUIVisibilityStrategy uiStrategy;
+
     public bool IsPlayVisible
     {
       get
@@ -85,7 +90,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
       }
     }
 
-    public MainPageViewModel(NetRadioStationsService netRadioService, IIoTDeviceService iotDeviceService)
+    public MainPageViewModel(NetRadioStationsService netRadioService, IIoTDeviceService iotDeviceService, UIVisibilityStrategyFactory visibilityStrategyFactory)
     {
       netRadioStationsService = netRadioService;
       netRadioStationsService.DataSynchronized += OnDataSynchronized;
@@ -94,13 +99,15 @@ namespace NetRadioPlayer.Mobile.ViewModels
       device.OpenConnection();
 
       DeviceEventProcessor.MessageFromDevice += OnMessageFromDevice;
+
+      this.visibilityStrategyFactory = visibilityStrategyFactory;
     }
 
     public async Task LoadNetRadiosFromDb()
     {
       netRadiosFromDb = await netRadioStationsService.GetRadioStationsFromSqliteAsync();
 
-      RadioStations = new ObservableCollection<NetRadioGroup>(netRadiosFromDb.ToNetRadioGroup());      
+      RadioStations = new ObservableCollection<NetRadioGroup>(netRadiosFromDb.ToNetRadioGroup());
     }
 
     public async Task SyncDataWithAzure()
@@ -137,52 +144,29 @@ namespace NetRadioPlayer.Mobile.ViewModels
       catch (Exception)
       {
         //show notification that device is unreachable
-      }      
+      }
     }
 
     public void SelectRadiostation(NetRadio selectedRadio)
     {
       SelectedRadioStation = selectedRadio;
+
+      IsPlayVisible = uiStrategy.PlayButtonVisibility(CurrentlyPlayingRadioStation?.RadioUrl, SelectedRadioStation?.RadioUrl);
     }
 
     private void OnMessageFromDevice(Device2CloudMessage content)
     {
-      switch (content.DeviceState)
-      {
-        case DeviceState.DeviceReady:
-          IsPlayVisible = true;
-          IsTurnOffVisible = true;
-          IsPauseVisible = false;
-          break;
-        case DeviceState.Paused:
-          IsPlayVisible = true;
-          IsPauseVisible = false;
-          IsTurnOffVisible = true;
-          CurrentlyPlayingRadioStation = null;
-          break;
-        case DeviceState.Playing:
-          IsPlayVisible = false;
-          IsPauseVisible = true;
-          IsTurnOffVisible = true;
-          CurrentlyPlayingRadioStation = RadioStations
+      uiStrategy = visibilityStrategyFactory.CreateStrategy(content);
+
+      IsPlayVisible = uiStrategy.PlayButtonVisibility(content.JsonPayload, SelectedRadioStation?.RadioUrl);
+      IsPauseVisible = uiStrategy.PauseButtonVisibility();
+      IsTurnOffVisible = uiStrategy.ShutdownButtonVisibility();
+      CurrentlyPlayingRadioStation = uiStrategy.ShouldClearCurrentlyPlaying()
+        ? null
+        : RadioStations
             .SelectMany(x => x.RadioStations)
             .Where(x => x.RadioUrl == content.JsonPayload)
-            .FirstOrDefault();
-          break;
-        case DeviceState.NotSet:
-        case DeviceState.TurnedOff:
-          AllButtonsDisabled();
-          break;
-        default:
-          throw new NotImplementedException($"Property not implemented: {content.DeviceState.ToString()}");
-      }
-    }
-
-    private void AllButtonsDisabled()
-    {
-      IsPlayVisible = false;
-      IsPauseVisible = false;
-      IsTurnOffVisible = false;
+            .FirstOrDefault();        
     }
 
     private void OnDataSynchronized(object sender, IList<NetRadio> radios)
