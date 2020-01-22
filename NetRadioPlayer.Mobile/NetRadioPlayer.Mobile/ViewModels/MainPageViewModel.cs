@@ -48,7 +48,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
       }
     }
 
-    private IUIVisibilityStrategy uiStrategy;
+    private IUIVisibilityStrategy uiStrategy = new DeviceTurnedoffStrategy();
 
     public bool IsPlayVisible
     {
