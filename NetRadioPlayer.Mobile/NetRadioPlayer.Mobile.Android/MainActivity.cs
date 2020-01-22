@@ -7,7 +7,7 @@ using NetRadioPlayer.Mobile.Configuration;
 
 namespace NetRadioPlayer.Mobile.Droid
 {
-  [Activity(Label = "NetRadioPlayer.Mobile", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+  [Activity(Label = "Net Radio Player", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
   public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
   {
     protected override void OnCreate(Bundle savedInstanceState)

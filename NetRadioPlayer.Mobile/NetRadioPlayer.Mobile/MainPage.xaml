@@ -24,7 +24,7 @@
         GroupDisplayBinding="{Binding FolderName}">
         <ListView.ItemTemplate>
           <DataTemplate>
-            <TextCell Text="{Binding RadioName}" />
+            <TextCell Text="{Binding RadioName}" TextColor="Black"/>
           </DataTemplate>
         </ListView.ItemTemplate>
       </ListView>
