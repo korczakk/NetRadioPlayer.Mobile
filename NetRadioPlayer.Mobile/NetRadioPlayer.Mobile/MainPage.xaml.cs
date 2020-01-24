@@ -36,7 +36,14 @@ namespace NetRadioPlayer.Mobile
     {    
       base.OnAppearing();
 
-      await viewModel.CallDeviceForStatus();
+      try
+      {
+        await viewModel.CallDeviceForStatus();
+      }
+      catch (Exception)
+      {
+        await DisplayAlert("Error", "Device is not responding", "OK");
+      }
       
       await viewModel.LoadNetRadiosFromDb();
 
@@ -66,6 +73,13 @@ namespace NetRadioPlayer.Mobile
     private async void Refresh_Clicked(object sender, EventArgs e)
     {
       await viewModel.CallDeviceForStatus();
+    }
+
+    private async void AddNew_Clicked(object sender, EventArgs e)
+    {
+      var modal = new AddNewStationPage();
+
+      await Navigation.PushModalAsync(modal);
     }
   }
 }

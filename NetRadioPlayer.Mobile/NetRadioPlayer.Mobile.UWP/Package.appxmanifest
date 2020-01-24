@@ -16,7 +16,7 @@
   <Properties>
     <DisplayName>NetRadioPlayer.Mobile.UWP</DisplayName>
     <PublisherDisplayName>01cd4b1e-ea17-4496-bd15-5ccfd900f8e6</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <Logo>Icon.jpg</Logo>
   </Properties>
 
   <Dependencies>
@@ -32,7 +32,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="NetRadioPlayer.Mobile.UWP.App">
       <uap:VisualElements
-        DisplayName="Net radio player"
+        DisplayName="Netradio player"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
         BackgroundColor="transparent"

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="NetRadioPlayer.Mobile.AddNewStationPage">
+  <ContentPage.Content>
+    <StackLayout>
+      <Label Text="Add new radio station"
+             FontSize="Large"
+                HorizontalOptions="Center" />
+      <Entry Placeholder="Radio name" Text="{Binding RadioName}"></Entry>
+      <Entry Placeholder="Radio URL" Text="{Binding RadioUrl}"></Entry>
+      <Entry Placeholder="Folder name" Text="{Binding FolderName}"></Entry>
+      <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+        <ImageButton Clicked="Save_Clicked" IsVisible="{Binding CanSave}" Source="Accept.png" BackgroundColor="Transparent" WidthRequest="60" HeightRequest="60" ></ImageButton>
+        <ImageButton Clicked="Cancel_Clicked" Source="Cancel.png" BackgroundColor="Transparent" WidthRequest="50" HeightRequest="50" ></ImageButton>
+      </StackLayout>      
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

@@ -76,6 +76,12 @@ namespace NetRadioPlayer.Mobile.ViewModels
         OnPropertyChanged(nameof(IsTurnOffVisible));
       }
     }
+
+    public void OpenAddNewStation()
+    {
+      throw new NotImplementedException();
+    }
+
     public bool IsPauseVisible
     {
       get
@@ -137,14 +143,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
 
     public async Task CallDeviceForStatus()
     {
-      try
-      {
-        await device.ExecuteCommand("askforstate", "{}");
-      }
-      catch (Exception)
-      {
-        //show notification that device is unreachable
-      }
+      await device.ExecuteCommand("askforstate", "{}");
     }
 
     public void SelectRadiostation(NetRadio selectedRadio)
@@ -166,7 +165,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
         : RadioStations
             .SelectMany(x => x.RadioStations)
             .Where(x => x.RadioUrl == content.JsonPayload)
-            .FirstOrDefault();        
+            .FirstOrDefault();
     }
 
     private void OnDataSynchronized(object sender, IList<NetRadio> radios)

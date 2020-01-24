@@ -49,6 +49,18 @@ namespace NetRadioPlayer.Mobile.Services
       DataSynchronized?.Invoke(this, radioStationsInCloud);
     }
 
+    public async Task AddRadioStationToAzure(NetRadio radio)
+    {
+      CloudTable tableRef = tableHelper.GetTableReference("NetRadioStations");
+
+      TableOperation insertOperation = TableOperation.Insert(radio);
+      
+      await tableRef.ExecuteAsync(insertOperation)
+        .ContinueWith(x =>
+        {
+          throw new Exception("Adding entity to Azure table storage failed.");
+        }, TaskContinuationOptions.OnlyOnFaulted);
+    }
 
     private async Task<IList<NetRadio>> GetRadioStationsFromAzure()
     {
@@ -67,11 +79,6 @@ namespace NetRadioPlayer.Mobile.Services
       } while (continuationToken != null);
 
       return netRadios;
-    }
-
-    private async Task SaveInSqlite(IList<NetRadio> radios)
-    {
-      await dbContext.InsertAllAsync(radios);
     }
 
     private async Task UpdateDataInDatabase(IEnumerable<NetRadio> radios)

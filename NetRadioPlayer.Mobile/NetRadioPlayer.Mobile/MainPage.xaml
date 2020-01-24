@@ -11,7 +11,7 @@
     <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" Padding="0, 20, 0, 25">
       <ImageButton IsVisible="{Binding IsPlayVisible, FallbackValue=False}" Clicked="Play_Clicked" WidthRequest="50" Source="Playicon.png" BackgroundColor="Transparent" BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
       <ImageButton IsVisible="{Binding IsPauseVisible, FallbackValue=False}" Clicked="Pause_clicked" WidthRequest="50" Source="Pauseicon.png" BackgroundColor="Transparent" BorderWidth="0" Margin="20, 0, 0, 0"></ImageButton>
-      <ImageButton Source="AddNewicon.png" WidthRequest="50" BorderWidth="0" BackgroundColor="Transparent" Margin="20, 0, 0, 0"></ImageButton>
+      <ImageButton Source="AddNewicon.png" Clicked="AddNew_Clicked"  WidthRequest="50" BorderWidth="0" BackgroundColor="Transparent" Margin="20, 0, 0, 0"></ImageButton>
       <ImageButton Clicked="Refresh_Clicked"  WidthRequest="50" Source="Refresh.png" BackgroundColor="Transparent"  BorderWidth="0"></ImageButton>
       <ImageButton IsVisible="{Binding IsTurnOffVisible, FallbackValue=False}" Clicked="Shutdown_clicked" WidthRequest="50" Source="Shutdownicon.png" BackgroundColor="Transparent"  BorderWidth="0" HorizontalOptions="EndAndExpand"></ImageButton>
     </StackLayout>
