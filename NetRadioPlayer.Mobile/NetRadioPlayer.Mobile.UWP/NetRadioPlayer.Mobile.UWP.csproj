@@ -112,7 +112,6 @@
     <Content Include="Assets\LargeTile.scale-200.png" />
     <Content Include="Assets\LargeTile.scale-400.png" />
     <Content Include="Cancel.png" />
-    <Content Include="Icon.jpg" />
     <Content Include="Pauseicon.png" />
     <Content Include="Playicon.png" />
     <Content Include="Refresh.png" />

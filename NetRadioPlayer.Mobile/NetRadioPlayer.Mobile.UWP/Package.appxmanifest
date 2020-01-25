@@ -9,14 +9,14 @@
   <Identity
     Name="d07b2c7c-6598-4461-b837-1ac74c32184c"
     Publisher="CN=01cd4b1e-ea17-4496-bd15-5ccfd900f8e6"
-    Version="1.0.0.0" />
+    Version="1.0.7.0" />
 
   <mp:PhoneIdentity PhoneProductId="ec0cc741-fd3e-485c-81be-68815c480690" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>NetRadioPlayer.Mobile.UWP</DisplayName>
     <PublisherDisplayName>01cd4b1e-ea17-4496-bd15-5ccfd900f8e6</PublisherDisplayName>
-    <Logo>Icon.jpg</Logo>
+    <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
   <Dependencies>
@@ -32,7 +32,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="NetRadioPlayer.Mobile.UWP.App">
       <uap:VisualElements
-        DisplayName="Netradio player"
+        DisplayName="Net radio player"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
         BackgroundColor="transparent"
@@ -46,7 +46,8 @@
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
         <uap:InitialRotationPreference>
-          <uap:Rotation Preference="portrait"/></uap:InitialRotationPreference>
+          <uap:Rotation Preference="portrait"/>
+        </uap:InitialRotationPreference>
       </uap:VisualElements>
     </Application>
   </Applications>
