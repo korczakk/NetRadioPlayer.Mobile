@@ -32,18 +32,7 @@ namespace NetRadioPlayer.Mobile
     {    
       base.OnAppearing();
 
-      try
-      {
-        await viewModel.CallDeviceForStatus();
-      }
-      catch
-      {
-        await DisplayAlert("Alert", "Device is not responding", "OK");
-      }
-      
-      await viewModel.LoadNetRadiosFromDb();
-
-      await viewModel.SyncDataWithAzure();
+      await InitialLoad();
     }
 
     private void ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -68,6 +57,18 @@ namespace NetRadioPlayer.Mobile
 
     private async void Refresh_Clicked(object sender, EventArgs e)
     {
+      await InitialLoad();
+    }
+
+    private async void AddNew_Clicked(object sender, EventArgs e)
+    {
+      var modal = new AddNewStationPage();
+
+      await Navigation.PushModalAsync(modal);
+    }
+
+    private async Task InitialLoad()
+    {
       try
       {
         await viewModel.CallDeviceForStatus();
@@ -76,13 +77,10 @@ namespace NetRadioPlayer.Mobile
       {
         await DisplayAlert("Alert", "Device is not responding", "OK");
       }
-    }
 
-    private async void AddNew_Clicked(object sender, EventArgs e)
-    {
-      var modal = new AddNewStationPage();
+      await viewModel.LoadNetRadiosFromDb();
 
-      await Navigation.PushModalAsync(modal);
+      await viewModel.SyncDataWithAzure();
     }
   }
 }
