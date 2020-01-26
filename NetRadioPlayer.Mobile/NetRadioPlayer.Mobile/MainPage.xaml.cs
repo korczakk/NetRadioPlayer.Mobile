@@ -1,13 +1,9 @@
 ﻿using NetRadioPlayer.Mobile.Model;
-using NetRadioPlayer.Mobile.Persistance;
 using NetRadioPlayer.Mobile.Services;
 using NetRadioPlayer.Mobile.ViewModels;
 using NetRadioPlayer.Mobile.Helpers;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using NetRadioPlayer.Mobile.UIStrategies;
@@ -40,9 +36,9 @@ namespace NetRadioPlayer.Mobile
       {
         await viewModel.CallDeviceForStatus();
       }
-      catch (Exception)
+      catch
       {
-        await DisplayAlert("Error", "Device is not responding", "OK");
+        await DisplayAlert("Alert", "Device is not responding", "OK");
       }
       
       await viewModel.LoadNetRadiosFromDb();
@@ -72,7 +68,14 @@ namespace NetRadioPlayer.Mobile
 
     private async void Refresh_Clicked(object sender, EventArgs e)
     {
-      await viewModel.CallDeviceForStatus();
+      try
+      {
+        await viewModel.CallDeviceForStatus();
+      }
+      catch
+      {
+        await DisplayAlert("Alert", "Device is not responding", "OK");
+      }
     }
 
     private async void AddNew_Clicked(object sender, EventArgs e)
