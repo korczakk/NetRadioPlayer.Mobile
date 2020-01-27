@@ -54,12 +54,8 @@ namespace NetRadioPlayer.Mobile.Services
       CloudTable tableRef = tableHelper.GetTableReference("NetRadioStations");
 
       TableOperation insertOperation = TableOperation.Insert(radio);
-      
-      await tableRef.ExecuteAsync(insertOperation)
-        .ContinueWith(x =>
-        {
-          throw new Exception("Adding entity to Azure table storage failed.");
-        }, TaskContinuationOptions.OnlyOnFaulted);
+
+      await tableRef.ExecuteAsync(insertOperation);
     }
 
     private async Task<IList<NetRadio>> GetRadioStationsFromAzure()

@@ -32,12 +32,14 @@ namespace NetRadioPlayer.Mobile
       try
       {
         await vm.Save();
-        await Navigation.PopModalAsync();
+        
       }
       catch (Exception)
       {
         await DisplayAlert("Error", "Data not saved!", "OK");
       }
+
+      await Navigation.PopModalAsync();
     }
 
     private async void Cancel_Clicked(object sender, EventArgs e)
