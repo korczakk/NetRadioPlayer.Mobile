@@ -18,8 +18,14 @@
       <ImageButton IsVisible="{Binding ShowVolumeButton, FallbackValue=False}" Clicked="VolumeButton_Clicked" WidthRequest="50" Source="Volume.png" BackgroundColor="Transparent"  BorderWidth="0"></ImageButton>
       <ImageButton IsVisible="{Binding IsTurnOffVisible, FallbackValue=False}" Clicked="Shutdown_clicked" WidthRequest="50" Source="Shutdownicon.png" BackgroundColor="Transparent"  BorderWidth="0" HorizontalOptions="EndAndExpand"></ImageButton>
     </StackLayout>
-    <StackLayout Margin="10, 0, 10, 5">
-      <Slider Value="{Binding Volume, Mode=TwoWay}" IsVisible="{Binding ShowVolume, FallbackValue=false}" Minimum="0" Maximum="100" ValueChanged="VolumeChanged" BackgroundColor="WhiteSmoke"></Slider>
+    <StackLayout Margin="10, 20, 10, 5">
+      <Slider Value="{Binding Volume, Mode=TwoWay}"
+              IsVisible="{Binding ShowVolume, FallbackValue=false}" 
+              Minimum="0" 
+              Maximum="100" 
+              ValueChanged="VolumeChanged" 
+              BackgroundColor="DarkOrange"
+              HeightRequest="27"></Slider>
     </StackLayout>
     <StackLayout>
       <ListView  
