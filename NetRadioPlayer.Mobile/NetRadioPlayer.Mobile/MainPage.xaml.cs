@@ -29,7 +29,7 @@ namespace NetRadioPlayer.Mobile
     }
 
     protected override async void OnAppearing()
-    {    
+    {
       base.OnAppearing();
 
       await InitialLoad();
@@ -81,6 +81,16 @@ namespace NetRadioPlayer.Mobile
       await viewModel.LoadNetRadiosFromDb();
 
       await viewModel.SyncDataWithAzure();
+    }
+
+    private async void VolumeChanged(object sender, ValueChangedEventArgs e)
+    {
+      await viewModel.SetVolume();
+    }
+
+    private void VolumeButton_Clicked(object sender, EventArgs e)
+    {
+      viewModel.ShowVolume = !viewModel.ShowVolume;
     }
   }
 }

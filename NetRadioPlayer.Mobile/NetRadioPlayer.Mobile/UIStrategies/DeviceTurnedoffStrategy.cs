@@ -14,5 +14,7 @@ namespace NetRadioPlayer.Mobile.UIStrategies
     public bool ShouldClearCurrentlyPlaying() => true;
 
     public bool ShutdownButtonVisibility() => false;
+
+    public bool ShowVolumeButton() => false;
   }
 }

@@ -44,9 +44,10 @@ namespace NetRadioPlayer.Mobile
       await EventHubRegistrator.Unregister();
     }
 
-    protected override void OnResume()
+    protected override async void OnResume()
     {
-      // Handle when your app resumes
+      if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+        await EventHubRegistrator.Register();
     }
   }
 }

@@ -8,6 +8,7 @@ using NetRadioPlayer.Mobile.Model;
 using NetRadioPlayer.Mobile.Services;
 using NetRadioPlayer.Mobile.Helpers;
 using NetRadioPlayer.Mobile.UIStrategies;
+using Newtonsoft.Json;
 
 namespace NetRadioPlayer.Mobile.ViewModels
 {
@@ -22,6 +23,10 @@ namespace NetRadioPlayer.Mobile.ViewModels
     private bool isTurnOffVisible = false;
     private NetRadio currentlyPlayingRadioStation;
     private IList<NetRadio> netRadiosFromDb;
+    private IUIVisibilityStrategy uiStrategy = new DeviceTurnedoffStrategy();
+    private int volume;
+    private bool showVolumeButton;
+    private bool showVolume;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -47,9 +52,6 @@ namespace NetRadioPlayer.Mobile.ViewModels
         OnPropertyChanged(nameof(CurrentlyPlayingRadioStation));
       }
     }
-
-    private IUIVisibilityStrategy uiStrategy = new DeviceTurnedoffStrategy();
-
     public bool IsPlayVisible
     {
       get
@@ -76,12 +78,6 @@ namespace NetRadioPlayer.Mobile.ViewModels
         OnPropertyChanged(nameof(IsTurnOffVisible));
       }
     }
-
-    public void OpenAddNewStation()
-    {
-      throw new NotImplementedException();
-    }
-
     public bool IsPauseVisible
     {
       get
@@ -93,6 +89,36 @@ namespace NetRadioPlayer.Mobile.ViewModels
       {
         isPauseVisible = value;
         OnPropertyChanged(nameof(IsPauseVisible));
+      }
+    }
+    public int Volume
+    {
+      get
+      {
+        return volume;
+      }
+      set
+      {
+        volume = value;
+        OnPropertyChanged(nameof(Volume));
+      }
+    }
+    public bool ShowVolumeButton
+    {
+      get => showVolumeButton;
+      set
+      {
+        showVolumeButton = value;
+        OnPropertyChanged(nameof(ShowVolumeButton));
+      }
+    }
+    public bool ShowVolume
+    {
+      get => showVolume;
+      set
+      {
+        showVolume = value;
+        OnPropertyChanged(nameof(ShowVolume));
       }
     }
 
@@ -128,12 +154,19 @@ namespace NetRadioPlayer.Mobile.ViewModels
 
     public async Task Play()
     {
-      await device.ExecuteCommand("play", "{\"Uri\": \"" + SelectedRadioStation.RadioUrl + "\"}");
+      var mediaPlayerState = new MediaPlayerState(SelectedRadioStation.RadioUrl, volume);
+      await device.ExecuteCommand("play", JsonConvert.SerializeObject(mediaPlayerState));
     }
 
     public async Task Pause()
     {
       await device.ExecuteCommand("pause", "{}");
+    }
+
+    public async Task SetVolume()
+    {
+      var mediaPlayerState = new MediaPlayerState(SelectedRadioStation?.RadioUrl, volume);
+      await device.ExecuteCommand("setvolume", JsonConvert.SerializeObject(mediaPlayerState));
     }
 
     public async Task Shutdown()
@@ -157,15 +190,17 @@ namespace NetRadioPlayer.Mobile.ViewModels
     {
       uiStrategy = visibilityStrategyFactory.CreateStrategy(content);
 
-      IsPlayVisible = uiStrategy.PlayButtonVisibility(content.JsonPayload, SelectedRadioStation?.RadioUrl);
+      IsPlayVisible = uiStrategy.PlayButtonVisibility(content.PlayerState.RadioUrl, SelectedRadioStation?.RadioUrl);
       IsPauseVisible = uiStrategy.PauseButtonVisibility();
       IsTurnOffVisible = uiStrategy.ShutdownButtonVisibility();
       CurrentlyPlayingRadioStation = uiStrategy.ShouldClearCurrentlyPlaying()
         ? null
         : RadioStations
             .SelectMany(x => x.RadioStations)
-            .Where(x => x.RadioUrl == content.JsonPayload)
+            .Where(x => x.RadioUrl == content.PlayerState.RadioUrl)
             .FirstOrDefault();
+      Volume = content.PlayerState.VolumePercent;
+      ShowVolumeButton = uiStrategy.ShowVolumeButton();
     }
 
     private void OnDataSynchronized(object sender, IList<NetRadio> radios)

@@ -8,5 +8,6 @@ namespace NetRadioPlayer.Mobile.UIStrategies
     bool PauseButtonVisibility();
     bool ShutdownButtonVisibility();
     bool ShouldClearCurrentlyPlaying();
+    bool ShowVolumeButton();
   }
 }
