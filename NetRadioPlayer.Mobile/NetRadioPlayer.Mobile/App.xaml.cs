@@ -47,7 +47,14 @@ namespace NetRadioPlayer.Mobile
     protected override async void OnResume()
     {
       if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-        await EventHubRegistrator.Register();
+      {
+        await EventHubRegistrator.Register();        
+      }
+      else
+      {
+        await MainPage.Navigation.PushModalAsync(new NoConnectionPage());
+      }
+        
     }
   }
 }

@@ -30,7 +30,10 @@ namespace NetRadioPlayer.Mobile.Helpers
 
     public static async Task Unregister()
     {
-      await eventProcessorHost.UnregisterEventProcessorAsync();
+      if (eventProcessorHost != null)
+      {
+        await eventProcessorHost.UnregisterEventProcessorAsync();
+      }
     }
   }
 }
