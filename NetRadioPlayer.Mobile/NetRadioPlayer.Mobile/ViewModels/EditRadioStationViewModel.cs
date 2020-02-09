@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace NetRadioPlayer.Mobile.ViewModels
 {
-  public class AddRadioStationViewModel : INotifyPropertyChanged, IEditOrUpdateViewModel
+  public class EditRadioStationViewModel : INotifyPropertyChanged, IEditOrUpdateViewModel
   {
     private readonly NetRadioStationsService netradioService;
+    private readonly NetRadio radioToEdit;
+    private readonly string rowKey;
+    private readonly string partitionKey;
     private string radioName;
     private string radioUrl;
     private string folderName;
@@ -16,7 +19,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
     public event PropertyChangedEventHandler PropertyChanged;
 
     public string RadioName
-    { 
+    {
       get
       {
         return radioName;
@@ -24,7 +27,7 @@ namespace NetRadioPlayer.Mobile.ViewModels
       set
       {
         radioName = value;
-        OnPropertyChanged(nameof(CanSave));
+        OnPropertyChanged(nameof(RadioName));
       }
     }
     public string RadioUrl
@@ -36,11 +39,11 @@ namespace NetRadioPlayer.Mobile.ViewModels
       set
       {
         radioUrl = value;
-        OnPropertyChanged(nameof(CanSave));
+        OnPropertyChanged(nameof(RadioUrl));
       }
     }
-    public string FolderName 
-    { 
+    public string FolderName
+    {
       get
       {
         return folderName;
@@ -48,32 +51,40 @@ namespace NetRadioPlayer.Mobile.ViewModels
       set
       {
         folderName = value;
-        OnPropertyChanged(nameof(CanSave));
+        OnPropertyChanged(nameof(FolderName));
       }
     }
 
     public bool CanSave
-    { 
-      get
-      {
-        return !String.IsNullOrEmpty(RadioName)
-          && !String.IsNullOrEmpty(RadioUrl)
-          && !String.IsNullOrEmpty(FolderName);
-      }
+    {
+      get => true;
     }
-
     public string PageTitle { get; set; }
 
-    public AddRadioStationViewModel(NetRadioStationsService netradioService)
+    public EditRadioStationViewModel(NetRadioStationsService netradioService, NetRadio radioToEdit)
     {
       this.netradioService = netradioService;
+      this.radioToEdit = radioToEdit;
+      this.rowKey = radioToEdit.RowKey;
+      this.partitionKey = radioToEdit.PartitionKey;
+
+      RadioName = radioToEdit.RadioName;
+      RadioUrl = radioToEdit.RadioUrl;
+      FolderName = radioToEdit.Folder;
     }
 
     public async Task Save()
     {
-      var radio = new NetRadio(RadioName, RadioUrl, FolderName);
+      var radioToDelete = new NetRadio()
+      {
+        RowKey = rowKey,
+        PartitionKey = partitionKey,
+        ETag = "*"
+      };
+      await netradioService.DeleteRadioStation(radioToDelete);
 
-      await netradioService.AddRadioStation(radio);
+      var newRadioData = new NetRadio(radioName, radioUrl, folderName);
+      await netradioService.AddRadioStation(newRadioData);
     }
 
     private void OnPropertyChanged(string name)

@@ -4,10 +4,10 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="NetRadioPlayer.Mobile.AddNewStationPage">
+             x:Class="NetRadioPlayer.Mobile.AddOrEditStationPage">
   <ContentPage.Content>
     <StackLayout>
-      <Label Text="Add new radio station"
+      <Label Text="{Binding PageTitle}"
              FontSize="Large"
                 HorizontalOptions="Center" />
       <Entry Placeholder="Radio name" Text="{Binding RadioName}"></Entry>

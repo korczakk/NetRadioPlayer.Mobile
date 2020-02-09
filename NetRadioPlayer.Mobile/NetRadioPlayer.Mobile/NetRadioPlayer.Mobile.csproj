@@ -17,7 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="AddNewStationPage.xaml">
+    <Compile Update="AddOrEditStationPage.xaml.cs">
+      <DependentUpon>AddOrEditStationPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="AddOrEditStationPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="NoConnectionPage.xaml">

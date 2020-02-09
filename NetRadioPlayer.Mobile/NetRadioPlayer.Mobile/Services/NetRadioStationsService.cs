@@ -49,13 +49,20 @@ namespace NetRadioPlayer.Mobile.Services
       DataSynchronized?.Invoke(this, radioStationsInCloud);
     }
 
-    public async Task AddRadioStationToAzure(NetRadio radio)
+    public async Task AddRadioStation(NetRadio radio)
     {
       CloudTable tableRef = tableHelper.GetTableReference("NetRadioStations");
 
       TableOperation insertOperation = TableOperation.Insert(radio);
 
       await tableRef.ExecuteAsync(insertOperation);
+    }
+
+    public async Task DeleteRadioStation(NetRadio radio)
+    {
+      CloudTable tableRef = tableHelper.GetTableReference("NetRadioStations");
+      TableOperation deleteOperation = TableOperation.Delete(radio);
+      await tableRef.ExecuteAsync(deleteOperation);
     }
 
     private async Task<IList<NetRadio>> GetRadioStationsFromAzure()

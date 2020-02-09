@@ -22,6 +22,7 @@ namespace NetRadioPlayer.Mobile.Model
       Folder = folder;
       RowKey = Guid.NewGuid().ToString();
       PartitionKey = folder;
+      ETag = "*";
     }
 
     public override bool Equals(Object obj)

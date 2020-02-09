@@ -16,12 +16,13 @@ namespace NetRadioPlayer.Mobile
   public partial class MainPage : ContentPage
   {
     private MainPageViewModel viewModel;
+    private readonly NetRadioStationsService netRadioService;
 
     public MainPage()
     {
       InitializeComponent();
 
-      var netRadioService = new NetRadioStationsService(DependencyService.Resolve<ITableStorageHelper>());
+      netRadioService = new NetRadioStationsService(DependencyService.Resolve<ITableStorageHelper>());
       var iotDeviceService = DependencyService.Resolve<IIoTDeviceService>();
       viewModel = new MainPageViewModel(netRadioService, iotDeviceService, new UIVisibilityStrategyFactory());
 
@@ -62,7 +63,20 @@ namespace NetRadioPlayer.Mobile
 
     private async void AddNew_Clicked(object sender, EventArgs e)
     {
-      var modal = new AddNewStationPage();
+      var vm = new AddRadioStationViewModel(netRadioService);
+      vm.PageTitle = "Add new radio station";
+
+      var modal = new AddOrEditStationPage(vm);
+
+      await Navigation.PushModalAsync(modal);
+    }
+
+    private async void Edit_Clicked(object sender, EventArgs e)
+    {
+      var vm = new EditRadioStationViewModel(netRadioService, (sender as MenuItem).CommandParameter as NetRadio);
+      vm.PageTitle = "Update existing radio";
+
+      var modal = new AddOrEditStationPage(vm);
 
       await Navigation.PushModalAsync(modal);
     }

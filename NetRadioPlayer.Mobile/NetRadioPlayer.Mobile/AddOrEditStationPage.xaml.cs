@@ -13,28 +13,26 @@ using Xamarin.Forms.Xaml;
 namespace NetRadioPlayer.Mobile
 {
   [XamlCompilation(XamlCompilationOptions.Compile)]
-  public partial class AddNewStationPage : ContentPage
+  public partial class AddOrEditStationPage : ContentPage
   {
-    private AddRadioStationViewModel vm;
+    private IEditOrUpdateViewModel _vm;
 
-    public AddNewStationPage()
+    public AddOrEditStationPage(IEditOrUpdateViewModel vm)
     {
       InitializeComponent();
 
-      var netRadioService = new NetRadioStationsService(DependencyService.Resolve<ITableStorageHelper>());
-      vm = new AddRadioStationViewModel(netRadioService);
-
       BindingContext = vm;
+      _vm = vm;
     }
 
     private async void Save_Clicked(object sender, EventArgs e)
     {
       try
       {
-        await vm.Save();
+        await _vm.Save();
         
       }
-      catch (Exception)
+      catch (Exception ex)
       {
         await DisplayAlert("Error", "Data not saved!", "OK");
       }
