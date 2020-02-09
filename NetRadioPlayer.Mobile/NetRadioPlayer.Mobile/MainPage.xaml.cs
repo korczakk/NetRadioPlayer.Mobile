@@ -80,6 +80,11 @@ namespace NetRadioPlayer.Mobile
 
       await Navigation.PushModalAsync(modal);
     }
+    private async void Delete_Clicked(object sender, EventArgs e)
+    {
+      var radio = (sender as MenuItem).CommandParameter as NetRadio;
+      await viewModel.DeleteRadio(radio);
+    }
 
     private async Task InitialLoad()
     {

@@ -40,6 +40,8 @@
               <ViewCell.ContextActions>
                 <MenuItem Text="Edit" Clicked="Edit_Clicked" CommandParameter="{Binding .}">
                 </MenuItem>
+                <MenuItem Text="Delete radio" Clicked="Delete_Clicked" CommandParameter="{Binding .}">
+                </MenuItem>
               </ViewCell.ContextActions>
               <StackLayout Padding="10,0" VerticalOptions="Center">
                 <Label Text="{Binding RadioName}" TextColor="Black" ></Label>

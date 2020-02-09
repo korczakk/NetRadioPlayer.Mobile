@@ -186,6 +186,19 @@ namespace NetRadioPlayer.Mobile.ViewModels
       IsPlayVisible = uiStrategy.PlayButtonVisibility(CurrentlyPlayingRadioStation?.RadioUrl, SelectedRadioStation?.RadioUrl);
     }
 
+    public async Task DeleteRadio(NetRadio radioToDelete)
+    {
+      await netRadioStationsService.DeleteRadioStation(radioToDelete);
+      
+      var radioGroup = this.RadioStations.SingleOrDefault(x => x.Any(r => r.RowKey == radioToDelete.RowKey));
+      int index = this.RadioStations.IndexOf(radioGroup);
+
+      radioGroup.Remove(radioToDelete);
+      this.RadioStations.RemoveAt(index);
+      
+      this.RadioStations.Insert(index, radioGroup);
+    }
+
     private void OnMessageFromDevice(Device2CloudMessage content)
     {
       uiStrategy = visibilityStrategyFactory.CreateStrategy(content);
